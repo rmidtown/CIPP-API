@@ -17,12 +17,12 @@ $RawGraphRequest = if ($TenantFilter -ne 'AllTenants') {
 }
 else {
     $Table = Get-CIPPTable -TableName cachelicenses
-    $Rows = Get-AzDataTableEntity @Table | Where-Object -Property Timestamp -GT (Get-Date).AddHours(-1)
+    $Rows = Get-CIPPAzDataTableEntity @Table | Where-Object -Property Timestamp -GT (Get-Date).AddHours(-1)
     if (!$Rows) {
         Push-OutputBinding -Name Msg -Value (Get-Date).ToString()
-        [PSCustomObject]@{
-            Tenant   = 'Loading data for all tenants. Please check back in 1 minute'
-            Licenses = 'Loading data for all tenants. Please check back in 1 minute'
+        $GraphRequest = [PSCustomObject]@{
+            Tenant  = 'Loading data for all tenants. Please check back in 1 minute'
+            License = 'Loading data for all tenants. Please check back in 1 minute'
         }
     }         
     else {

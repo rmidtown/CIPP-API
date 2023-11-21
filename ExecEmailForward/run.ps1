@@ -7,6 +7,7 @@ $Tenantfilter = $request.body.tenantfilter
 $ForwardingAddress = $request.body.ForwardInternal.value
 $ForwardingSMTPAddress = $request.body.ForwardExternal
 $DisableForwarding = $request.body.disableForwarding
+$APIName = $TriggerMetadata.FunctionName
 
 if ($ForwardingAddress) {
     try {
@@ -51,7 +52,7 @@ elseif ($DisableForwarding -eq "True") {
     try {
     New-ExoRequest -tenantid $TenantFilter -cmdlet "Set-Mailbox" -cmdParams @{Identity = $Username; ForwardingAddress = $null; ForwardingSMTPAddress = $null; DeliverToMailboxAndForward = $false }
     Write-LogMessage -user $request.headers.'x-ms-client-principal' -API $APINAME  -message "Disabled Email forwarding for $($username)" -Sev "Info" -tenant $TenantFilter
-    $results = "Disabled Email Forwerding for $($username)"
+    $results = "Disabled Email Forwarding for $($username)"
 }
 catch {
     Write-LogMessage -user $request.headers.'x-ms-client-principal' -API $APINAME  -message "Could not disable Email forwarding for $($username)" -Sev "Error" -tenant $TenantFilter
